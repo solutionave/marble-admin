@@ -21,15 +21,18 @@ const Sidebar = (props: any) => {
             </span>
             <span className="logo-lg">
               <img src={logoDark} alt="" height="17" />
+              
             </span>
           </Link>
 
           <Link to="/" className="logo logo-light">
             <span className="logo-sm">
-              <img src={logoLightSvg} alt="" height="22" />
+              MARBLE
+              {/* <img src={logoLightSvg} alt="" height="22" /> */}
             </span>
             <span className="logo-lg">
-              <img src={logoLightPng} alt="" height="19" />
+            MARBLE
+              {/* <img src={logoLightPng} alt="" height="19" /> */}
             </span>
           </Link>
         </div>

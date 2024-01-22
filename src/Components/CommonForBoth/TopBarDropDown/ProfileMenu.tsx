@@ -69,7 +69,7 @@ const ProfileMenu = (props: any) => {
             <i className="bx bx-user font-size-16 align-middle me-1" />
             {props.t("Profile")}{" "}
           </DropdownItem>
-          <DropdownItem tag="a" href={process.env.PUBLIC_URL + "/crypto-wallet"}>
+          {/* <DropdownItem tag="a" href={process.env.PUBLIC_URL + "/crypto-wallet"}>
             <i className="bx bx-wallet font-size-16 align-middle me-1" />
             {props.t("My Wallet")}
           </DropdownItem>
@@ -81,7 +81,7 @@ const ProfileMenu = (props: any) => {
           <DropdownItem tag="a" href={process.env.PUBLIC_URL + "/auth-lock-screen"}>
             <i className="bx bx-lock-open font-size-16 align-middle me-1" />
             {props.t("Lock screen")}
-          </DropdownItem>
+          </DropdownItem> */}
           <div className="dropdown-divider" />
           <Link to="/logout" className="dropdown-item">
             <i className="bx bx-power-off font-size-16 align-middle me-1 text-danger" />

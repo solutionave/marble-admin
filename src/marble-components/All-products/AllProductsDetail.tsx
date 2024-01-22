@@ -32,8 +32,8 @@ import { getProductDetail as onGetProductDetail } from "slices/thunk";
 import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
 
-function AllProductsDetail({viewdata}) {
-    console.log(viewdata.description)
+function AllProductsDetail({ viewdata }) {
+  console.log(viewdata.description);
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
@@ -54,32 +54,36 @@ function AllProductsDetail({viewdata}) {
   );
   return (
     <div>
-      <Button
+      <i
+        onClick={toggle}
+        style={{ fontSize: "20px",cursor:'pointer' }}
+        className="dripicons-preview"
+      ></i>
+      {/* <Button
         className="px-2"
         style={{ backgroundColor: "blue", padding: "0px" }}
         onClick={toggle}
       >
         View Details
-      </Button>
-      <Modal isOpen={modal} toggle={toggle}  external={externalCloseBtn}>
+      </Button> */}
+      <Modal isOpen={modal} toggle={toggle} external={externalCloseBtn} >
         <ModalHeader>Product Detail</ModalHeader>
-              {/* <Breadcrumbs title="Ecommerce" breadcrumbItem="Product Detail" /> */}
+        {/* <Breadcrumbs title="Ecommerce" breadcrumbItem="Product Detail" /> */}
         <ModalBody>
-          <div  className="page-content">
+          <div className="page-content" style={{ paddingTop:'2px',paddingBottom:'5px'}}>
             <Container fluid>
-              <Row>
+              <Row >
                 <Col>
                   <Card>
-                    <CardBody>
+                    <CardBody >
                       <Row className="d-flex justify-content-center">
-                        <Col xl={10}>
+                        <Col xl={'10'}>
                           <div className="product-detai-imgs">
-                           
-                              <img src={viewdata.image} alt="alt" />
+                            <img src={viewdata.image} alt="alt" />
                           </div>
                         </Col>
 
-                        <Col xl="6">
+                        <Col xl="10">
                           <div className="mt-4 mt-xl-3">
                             {/* <Link to="#" className="text-primary">
                               ,,,
@@ -114,14 +118,12 @@ function AllProductsDetail({viewdata}) {
                             <b>${productDetail.newPrice} USD</b>
                           </h5> */}
                             <p className="text-muted mb-4">
-                             {viewdata.description}
+                              {viewdata.description}
                             </p>
-                           
 
                             <div className="product-color">
                               <h5 className="font-size-15">{viewdata.price}</h5>
                             </div>
-                           
                           </div>
                         </Col>
                       </Row>
