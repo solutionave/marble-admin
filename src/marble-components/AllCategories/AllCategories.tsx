@@ -19,7 +19,16 @@ import {
   Input,
 } from "reactstrap";
 import Breadcrumbs from "../../Components/Common/Breadcrumb";
+import Select from "react-select";
+import AsyncCreatableSelect from "react-select/async-creatable";
+import makeAnimated from "react-select/animated";
+const animatedComponents = makeAnimated();
 
+const options = [
+  { value: "chocolate", label: "Chocolate" },
+  { value: "strawberry", label: "Strawberry" },
+  { value: "vanilla", label: "Vanilla" },
+];
 interface Category {
   id: number;
   name: string;
@@ -29,7 +38,9 @@ interface Category {
 interface InputProps {
   type: string;
   value?: string | number | readonly string[];
-  onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  onChange?: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => void;
 }
 
 const handleDelete = (
@@ -62,7 +73,9 @@ const AllCategories: React.FC = () => {
   const [deleteCategory, setDeleteCategory] = useState<Category | null>(null);
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [newCategory, setNewCategory] = useState("");
-  const [selectedParentCategory, setSelectedParentCategory] = useState<number | null>(null);
+  const [selectedParentCategory, setSelectedParentCategory] = useState<
+    number | null
+  >(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [editedCategory, setEditedCategory] = useState<Category | null>(null);
 
@@ -93,10 +106,14 @@ const AllCategories: React.FC = () => {
   ) => {
     if (newCategory && parentId !== null) {
       const newCategoryId = categories.length + 1;
-      const newCategoryObject: Category = { id: newCategoryId, name: newCategory, parentId };
-  
+      const newCategoryObject: Category = {
+        id: newCategoryId,
+        name: newCategory,
+        parentId,
+      };
+
       console.log("Adding category:", newCategoryObject);
-  
+
       setCategories([...categories, newCategoryObject]);
       toggleAddModal();
     }
@@ -111,16 +128,32 @@ const AllCategories: React.FC = () => {
     toggleEditModal: () => void
   ) => {
     if (editedCategory && editedName && editedParentId !== null) {
-      const updatedCategories = categories.map(category =>
+      const updatedCategories = categories.map((category) =>
         category.id === editedCategory.id
           ? { ...category, name: editedName, parentId: editedParentId }
           : category
       );
-  
+
       setCategories(updatedCategories);
       toggleEditModal();
     }
   };
+
+  ////////////////////////////////
+
+  const [inputValue, setInputValue] = useState("");
+
+  const handleCreateOption = (inputValue: string) => {
+    const newOption = { value: inputValue.toLowerCase(), label: inputValue };
+    return newOption;
+  };
+
+  const loadOptions = (inputValue: string, callback: any) => {
+    // You can fetch or process options dynamically here
+    const filteredOptions = [{ value: inputValue, label: inputValue }];
+    callback(filteredOptions);
+  };
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -219,12 +252,24 @@ const AllCategories: React.FC = () => {
       </div>
 
       <Modal isOpen={isDeleteModalOpen} toggle={toggleDeleteModal}>
-        <ModalHeader toggle={toggleDeleteModal}>Delete Confirmation</ModalHeader>
+        <ModalHeader toggle={toggleDeleteModal}>
+          Delete Confirmation
+        </ModalHeader>
         <ModalBody>
           Are you sure to delete {deleteCategory && deleteCategory.name}?
         </ModalBody>
         <ModalFooter>
-          <Button color="danger" onClick={() => handleDelete(deleteCategory, categories, setCategories, toggleDeleteModal)}>
+          <Button
+            color="danger"
+            onClick={() =>
+              handleDelete(
+                deleteCategory,
+                categories,
+                setCategories,
+                toggleDeleteModal
+              )
+            }
+          >
             Delete
           </Button>{" "}
           <Button color="secondary" onClick={toggleDeleteModal}>
@@ -246,26 +291,32 @@ const AllCategories: React.FC = () => {
                 onChange={(e) => setNewCategory(e.target.value)}
               />
             </FormGroup>
-            <FormGroup>
-              <Label for="parentCategory">Parent Category</Label>
-              <Input
-                type="select"
-                id="parentCategory"
-                value={selectedParentCategory || ''}
-                onChange={(e) => setSelectedParentCategory(Number(e.target.value) || null)}
-              >
-                <option value="">None</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </Input>
-            </FormGroup>
+
+            <AsyncCreatableSelect
+              closeMenuOnSelect={false}
+              components={animatedComponents}
+              isMulti
+              onCreateOption={handleCreateOption}
+              loadOptions={(inputValue, callback) =>
+                loadOptions(inputValue, callback)
+              }
+              onInputChange={(input: string) => setInputValue(input)}
+            />
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={() => handleAddCategory(newCategory, selectedParentCategory, categories, setCategories, toggleAddModal)}>
+          <Button
+            color="primary"
+            onClick={() =>
+              handleAddCategory(
+                newCategory,
+                selectedParentCategory,
+                categories,
+                setCategories,
+                toggleAddModal
+              )
+            }
+          >
             Add Category
           </Button>{" "}
           <Button color="secondary" onClick={toggleAddModal}>
@@ -275,51 +326,56 @@ const AllCategories: React.FC = () => {
       </Modal>
 
       <Modal isOpen={isEditModalOpen} toggle={toggleEditModal}>
-  <ModalHeader toggle={toggleEditModal}>Edit Category</ModalHeader>
-  <ModalBody>
-    <Form>
-      <FormGroup>
-        <Label for="editCategory">Category Name</Label>
-        <Input
-          type="text"
-          id="editCategory"
-          value={editedCategory?.name || ''}
-          onChange={(e) => setEditedCategory((prev) => ({
-            ...prev!,
-            name: e.target.value
-          }))}
-        />
-      </FormGroup>
-      <FormGroup>
-        <Label for="editParentCategory">Parent Category</Label>
-        <Input
-          type="select"
-          id="editParentCategory"
-          value={editedCategory?.parentId || ''}
-          onChange={(e) => setEditedCategory((prev) => ({
-            ...prev!,
-            parentId: Number(e.target.value) || null
-          }))}
-        >
-          <option value="">None</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </Input>
-      </FormGroup>
-    </Form>
-  </ModalBody>
-  <ModalFooter>
-    <Button color="primary" onClick={() => handleEditCategory(editedCategory, editedCategory?.name || '', editedCategory?.parentId || null, categories, setCategories, toggleEditModal)}>
-      Save Changes
-    </Button>{" "}
-    <Button color="secondary" onClick={toggleEditModal}>
-      Cancel
-    </Button>
-  </ModalFooter>
-</Modal>
+        <ModalHeader toggle={toggleEditModal}>Edit Category</ModalHeader>
+        <ModalBody>
+          <Form>
+            <FormGroup>
+              <Label for="editCategory">Category Name</Label>
+              <Input
+                type="text"
+                id="editCategory"
+                value={editedCategory?.name || ""}
+                onChange={(e) =>
+                  setEditedCategory((prev) => ({
+                    ...prev!,
+                    name: e.target.value,
+                  }))
+                }
+              />
+            </FormGroup>
+            <AsyncCreatableSelect
+              closeMenuOnSelect={false}
+              components={animatedComponents}
+              isMulti
+              onCreateOption={handleCreateOption}
+              loadOptions={(inputValue, callback) =>
+                loadOptions(inputValue, callback)
+              }
+              onInputChange={(input: string) => setInputValue(input)}
+            />
+          </Form>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            color="primary"
+            onClick={() =>
+              handleEditCategory(
+                editedCategory,
+                editedCategory?.name || "",
+                editedCategory?.parentId || null,
+                categories,
+                setCategories,
+                toggleEditModal
+              )
+            }
+          >
+            Save Changes
+          </Button>{" "}
+          <Button color="secondary" onClick={toggleEditModal}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
     </React.Fragment>
   );
 };
