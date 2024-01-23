@@ -24,6 +24,9 @@ import {
 // Import Breadcrumb
 import Breadcrumbs from "../../Components/Common/Breadcrumb";
 import AllProductsDetail from "./AllProductsDetail";
+import AsyncCreatableSelect from "react-select/async-creatable";
+import makeAnimated from "react-select/animated";
+const animatedComponents = makeAnimated();
 
 const AllProducts = () => {
   document.title = "Basic Tables | Skote - React Admin & Dashboard Template";
@@ -163,61 +166,84 @@ const AllProducts = () => {
     // Close the add product modal
     toggleAddModal();
   };
-////////////////////////////// update modal ////////////////
 
-const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
+  // multi select modal
+  const [inputValue, setInputValue] = useState("");
 
-// New state for storing data of the product to be updated
-const [updateProduct, setUpdateProduct] = useState({
-  id: null,
-  name: "",
-  image: "",
-  description: "",
-  price: "",
-  location: "",
-});
+  const handleCreateOption = (inputValue: string) => {
+    const newOption = { value: inputValue.toLowerCase(), label: inputValue };
+    return newOption;
+  };
 
-// Function to toggle the update product modal
-const toggleUpdateModal = () => {
-  setUpdateModalOpen(!isUpdateModalOpen);
-};
+  const loadOptions = (inputValue: string, callback: any) => {
+    // You can fetch or process options dynamically here
+    const filteredOptions = [{ value: inputValue, label: inputValue }];
+    callback(filteredOptions);
+  };
+  ////////////////////////////// update modal ////////////////
 
-// Function to handle opening the update modal and prefilling with product data
-const handleUpdate = (product) => {
-  setUpdateProduct({
-    id: product.id,
-    name: product.name,
-    image: product.image,
-    description: product.description,
-    price: product.price,
-    location: product.location,
+  const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
+
+  // New state for storing data of the product to be updated
+  const [updateProduct, setUpdateProduct] = useState({
+    id: null,
+    name: "",
+    image: "",
+    description: "",
+    price: "",
+    location: "",
   });
-  toggleUpdateModal();
-};
 
-// Function to handle input changes in the update product form
-const handleUpdateInputChange = (e) => {
-  const { name, value } = e.target;
-  setUpdateProduct((prevProduct) => ({
-    ...prevProduct,
-    [name]: value,
-  }));
-};
+  // Function to toggle the update product modal
+  const toggleUpdateModal = () => {
+    setUpdateModalOpen(!isUpdateModalOpen);
+  };
 
-// Function to handle updating an existing product
-const handleUpdateProduct = () => {
-  // Perform any validation as needed
+  // Function to handle opening the update modal and prefilling with product data
+  const handleUpdate = (product) => {
+    setUpdateProduct({
+      id: product.id,
+      name: product.name,
+      image: product.image,
+      description: product.description,
+      price: product.price,
+      location: product.location,
+    });
+    toggleUpdateModal();
+  };
 
-  // Update the existing product in the products array
-  const updatedProducts = marbleProducts.map((product) =>
-    product.id === updateProduct.id ? { ...updateProduct } : product
-  );
+  // Function to handle input changes in the update product form
+  const handleUpdateInputChange = (e) => {
+    const { name, value } = e.target;
+    setUpdateProduct((prevProduct) => ({
+      ...prevProduct,
+      [name]: value,
+    }));
+  };
 
-  setMarbleProducts(updatedProducts as { id: number; name: string; image: string; description: string; price: string; location: string; }[]);
+  // Function to handle updating an existing product
+  const handleUpdateProduct = () => {
+    // Perform any validation as needed
 
-  // Close the update product modal
-  toggleUpdateModal();
-};
+    // Update the existing product in the products array
+    const updatedProducts = marbleProducts.map((product) =>
+      product.id === updateProduct.id ? { ...updateProduct } : product
+    );
+
+    setMarbleProducts(
+      updatedProducts as {
+        id: number;
+        name: string;
+        image: string;
+        description: string;
+        price: string;
+        location: string;
+      }[]
+    );
+
+    // Close the update product modal
+    toggleUpdateModal();
+  };
 
   return (
     <React.Fragment>
@@ -329,6 +355,8 @@ const handleUpdateProduct = () => {
         </div>
       </div>
 
+      {/* ////////////////////////// delete modal //////////// */}
+
       <Modal isOpen={isDeleteModalOpen} toggle={toggleDeleteModal}>
         <ModalHeader toggle={toggleDeleteModal}>
           Delete Confirmation
@@ -362,16 +390,7 @@ const handleUpdateProduct = () => {
                 onChange={handleInputChange}
               />
             </FormGroup>
-            <FormGroup>
-              <Label for="productImage">Product Image URL</Label>
-              <Input
-                type="text"
-                name="image"
-                id="productImage"
-                value={newProduct.image}
-                onChange={handleInputChange}
-              />
-            </FormGroup>
+
             <FormGroup>
               <Label for="productDescription">Product Description</Label>
               <Input
@@ -393,7 +412,29 @@ const handleUpdateProduct = () => {
               />
             </FormGroup>
             <FormGroup>
-              <Label for="productLocation">Product Location</Label>
+              <Label for="productImage">Product Image URL</Label>
+              <Input
+                type="file"
+                name="image"
+                id="productImage"
+                value={newProduct.image}
+                onChange={handleInputChange}
+              />
+            </FormGroup>
+
+            <Label for="productLocation">Product Location</Label>
+            <AsyncCreatableSelect
+              closeMenuOnSelect={false}
+              components={animatedComponents}
+              isMulti
+              onCreateOption={handleCreateOption}
+              loadOptions={(inputValue, callback) =>
+                loadOptions(inputValue, callback)
+              }
+              onInputChange={(input: string) => setInputValue(input)}
+            />
+
+            {/* <FormGroup>
               <Input
                 type="text"
                 name="location"
@@ -401,7 +442,7 @@ const handleUpdateProduct = () => {
                 value={newProduct.location}
                 onChange={handleInputChange}
               />
-            </FormGroup>
+            </FormGroup> */}
           </Form>
         </ModalBody>
         <ModalFooter>
@@ -430,16 +471,7 @@ const handleUpdateProduct = () => {
                 onChange={handleUpdateInputChange}
               />
             </FormGroup>
-            <FormGroup>
-              <Label for="updateProductImage">Product Image URL</Label>
-              <Input
-                type="text"
-                name="image"
-                id="updateProductImage"
-                value={updateProduct.image}
-                onChange={handleUpdateInputChange}
-              />
-            </FormGroup>
+
             <FormGroup>
               <Label for="updateProductDescription">Product Description</Label>
               <Input
@@ -461,6 +493,29 @@ const handleUpdateProduct = () => {
               />
             </FormGroup>
             <FormGroup>
+              <Label for="updateProductImage">Product Image URL</Label>
+              <Input
+                type="file"
+                name="image"
+                id="updateProductImage"
+                // value={updateProduct.image}
+                onChange={handleUpdateInputChange}
+              />
+            </FormGroup>
+
+            <Label for="productLocation">Product Location</Label>
+            <AsyncCreatableSelect
+              closeMenuOnSelect={false}
+              components={animatedComponents}
+              isMulti
+              onCreateOption={handleCreateOption}
+              loadOptions={(inputValue, callback) =>
+                loadOptions(inputValue, callback)
+              }
+              onInputChange={(input: string) => setInputValue(input)}
+            />
+
+            {/* <FormGroup>
               <Label for="updateProductLocation">Product Location</Label>
               <Input
                 type="text"
@@ -469,7 +524,7 @@ const handleUpdateProduct = () => {
                 value={updateProduct.location}
                 onChange={handleUpdateInputChange}
               />
-            </FormGroup>
+            </FormGroup> */}
           </Form>
         </ModalBody>
         <ModalFooter>

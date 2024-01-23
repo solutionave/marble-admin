@@ -184,6 +184,12 @@ const SidebarContent = (props: any) => {
                 <span>{props.t("Categories")}</span>
               </Link>
             </li>
+            <li>
+              <Link to="/store" >
+              <i className='bx bx-border-bottom' ></i>
+                <span>{props.t("Store")}</span>
+              </Link>
+            </li>
 
             {/* marble links end */}
 

@@ -172,6 +172,7 @@ import FormValidations from "../pages/Forms/FormValidations";
 import AllProducts from "marble-components/All-products/AllProducts";
 import MarbleTable from "marble-components/Categories/Marble/MarbleTable";
 import AllCategories from "marble-components/AllCategories/AllCategories";
+import StoreData from "marble-components/store/StoreData";
 
 const authProtectedRoutes = [
   // { path: "/dashboard", component: <Dashboard /> },
@@ -187,6 +188,7 @@ const authProtectedRoutes = [
   { path: "/allproducts", component: <AllProducts /> },
   { path: "/categories", component: <AllCategories /> },
   { path: "/marbledata", component: <MarbleTable /> },
+  { path: "/store", component: <StoreData /> },
 
   //marble-routes end
 
