@@ -186,7 +186,7 @@ const SidebarContent = (props: any) => {
             </li>
             <li>
               <Link to="/store" >
-              <i className='bx bx-border-bottom' ></i>
+              <i className='bx bxs-store'></i>
                 <span>{props.t("Store")}</span>
               </Link>
             </li>
