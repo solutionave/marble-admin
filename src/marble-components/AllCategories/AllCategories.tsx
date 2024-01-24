@@ -24,6 +24,7 @@ import AsyncCreatableSelect from "react-select/async-creatable";
 import makeAnimated from "react-select/animated";
 import CreatableSelect from "react-select/creatable";
 import { flavourOptions } from "../../Data";
+import DeleteCategoryModal from "./DeleteCatModal";
 const animatedComponents = makeAnimated();
 
 const options = [
@@ -477,6 +478,9 @@ const AllCategories: React.FC = () => {
           </Button>
         </ModalFooter>
       </Modal>
+
+
+      {/* delet modales  */}
     </React.Fragment>
   );
 };

@@ -5,29 +5,21 @@ import {
   Col,
   Card,
   CardBody,
-  CardTitle,
-  CardSubtitle,
   Pagination,
   PaginationItem,
   PaginationLink,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
-  Form,
-  FormGroup,
-  Label,
-  Input,
+
 } from "reactstrap";
 
 // Import Breadcrumb
 import Breadcrumbs from "../../Components/Common/Breadcrumb";
 import AllProductsDetail from "./AllProductsDetail";
-import AsyncCreatableSelect from "react-select/async-creatable";
+
 import makeAnimated from "react-select/animated";
-import CreatableSelect from "react-select/creatable";
-import { stateOptions } from "../../Data";
+import DeleteProductModal from "./ProductDeletModal";
+import AddProductModal from "./ProductAddModal";
+import UpdateProductModal from "./ProductUpdateModal";
 const animatedComponents = makeAnimated();
 
 const AllProducts = () => {
@@ -225,19 +217,7 @@ const AllProducts = () => {
     toggleAddModal();
   };
 
-  // multi select modal
-  const [inputValue, setInputValue] = useState("");
-
-  const handleCreateOption = (inputValue: string) => {
-    const newOption = { value: inputValue.toLowerCase(), label: inputValue };
-    return newOption;
-  };
-
-  const loadOptions = (inputValue: string, callback: any) => {
-    // You can fetch or process options dynamically here
-    const filteredOptions = [{ value: inputValue, label: inputValue }];
-    callback(filteredOptions);
-  };
+ 
   ////////////////////////////// update modal ////////////////
 
   const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
@@ -426,225 +406,44 @@ const AllProducts = () => {
         </div>
       </div>
 
-      {/* ////////////////////////// delete modal //////////// */}
-
-      <Modal isOpen={isDeleteModalOpen} toggle={toggleDeleteModal}>
-        <ModalHeader toggle={toggleDeleteModal}>
-          Delete Confirmation
-        </ModalHeader>
-        <ModalBody>
-          Are you sure to delete {deleteProduct && deleteProduct.name}?
-        </ModalBody>
-        <ModalFooter>
-          <Button color="danger" onClick={handleDelete}>
-            Delete
-          </Button>{" "}
-          <Button color="secondary" onClick={toggleDeleteModal}>
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Modal>
-
-      {/* ///////////////////// addd modal    //////////////////// */}
-
-      <Modal isOpen={isAddModalOpen} toggle={toggleAddModal}>
-        <ModalHeader toggle={toggleAddModal}>Add New Product</ModalHeader>
-        <ModalBody>
-          <Form>
-            <FormGroup>
-              <Label for="productName">Product Name</Label>
-              <Input
-                type="text"
-                name="name"
-                id="productName"
-                value={newProduct.name}
-                onChange={handleInputChange}
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label for="productDescription">Product Description</Label>
-              <Input
-                type="textarea"
-                name="description"
-                id="productDescription"
-                value={newProduct.description}
-                onChange={handleInputChange}
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label for="productPrice">Product Price</Label>
-              <Input
-                type="number"
-                name="price"
-                id="productPrice"
-                value={newProduct.price}
-                onChange={handleInputChange}
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label for="exampleSelect">Categories</Label>
-              <Input
-                id="exampleSelect"
-                name="select"
-                type="select"
-                value={selectedCategory}
-                onChange={(e) => {
-                  const selectedCategory = e.target.value;
-                  setSelectedCategory(selectedCategory);
-
-                  // Dynamically load subcategories based on the selected category
-                  const category = categories.find(
-                    (cat) => cat.name === selectedCategory
-                  );
-                  if (category) {
-                    setSelectedSubcategories(category.subcategories);
-                  }
-                }}
-              >
-                <option value="">Select Category</option>
-                {categories.map((cat) => (
-                  <option key={cat.id}>{cat.name}</option>
-                ))}
-              </Input>
-            </FormGroup>
-
-            <Label for="productLocation">Subcategories</Label>
-            <CreatableSelect
-              isMulti
-              components={animatedComponents}
-              options={selectedSubcategories.map((subCat) => ({
-                value: subCat.name,
-                label: subCat.name,
-              }))}
-              styles={customStyles}
-            />
-
-            <Col md={"6"} className="mt-3">
-              <FormGroup>
-                <Label for="productImage">Product Image URL</Label>
-                <Input
-                  type="file"
-                  name="image"
-                  id="productImage"
-                  value={newProduct.image}
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-            </Col>
-          </Form>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="success" onClick={handleAddProduct}>
-            Add Product
-          </Button>{" "}
-          <Button color="secondary" onClick={toggleAddModal}>
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Modal>
-      {/* ///////////////////// addd modal    //////////////////// */}
-
-      {/* //////////////////////// update modal /////////////////////// */}
-      <Modal isOpen={isUpdateModalOpen} toggle={toggleUpdateModal}>
-        <ModalHeader toggle={toggleUpdateModal}>Update Product</ModalHeader>
-        <ModalBody>
-          <Form>
-            <FormGroup>
-              <Label for="updateProductName">Product Name</Label>
-              <Input
-                type="text"
-                name="name"
-                id="updateProductName"
-                value={updateProduct.name}
-                onChange={handleUpdateInputChange}
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label for="updateProductDescription">Product Description</Label>
-              <Input
-                type="textarea"
-                name="description"
-                id="updateProductDescription"
-                value={updateProduct.description}
-                onChange={handleUpdateInputChange}
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label for="updateProductPrice">Product Price</Label>
-              <Input
-                type="number"
-                name="price"
-                id="updateProductPrice"
-                value={updateProduct.price}
-                onChange={handleUpdateInputChange}
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label for="exampleSelect">Categories</Label>
-              <Input
-                id="exampleSelect"
-                name="select"
-                type="select"
-                value={selectedCategory}
-                onChange={(e) => {
-                  const selectedCategory = e.target.value;
-                  setSelectedCategory(selectedCategory);
-
-                  // Dynamically load subcategories based on the selected category
-                  const category = categories.find(
-                    (cat) => cat.name === selectedCategory
-                  );
-                  if (category) {
-                    setSelectedSubcategories(category.subcategories);
-                  }
-                }}
-              >
-                <option value="">Select Category</option>
-                {categories.map((cat) => (
-                  <option key={cat.id}>{cat.name}</option>
-                ))}
-              </Input>
-            </FormGroup>
-
-            <Label for="productLocation">Subcategories</Label>
-            <CreatableSelect
-              isMulti
-              components={animatedComponents}
-              options={selectedSubcategories.map((subCat) => ({
-                value: subCat.name,
-                label: subCat.name,
-              }))}
-              styles={customStyles}
-            />
-
-            <Col md={"6"} className="mt-3">
-              <FormGroup>
-                <Label for="updateProductImage">Product Image URL</Label>
-                <Input
-                  type="file"
-                  name="image"
-                  id="updateProductImage"
-                  // value={updateProduct.image}
-                  onChange={handleUpdateInputChange}
-                />
-              </FormGroup>
-            </Col>
-          </Form>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="success" onClick={handleUpdateProduct}>
-            Update Product
-          </Button>{" "}
-          <Button color="secondary" onClick={toggleUpdateModal}>
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Modal>
-      {/* //////////////////////// update modal /////////////////////// */}
+      {/* ////////////////////////// modales //////////// */}
+      {/* Add Product Modal */}
+      <AddProductModal
+        isOpen={isAddModalOpen}
+        toggleAddModal={toggleAddModal}
+        handleInputChange={handleInputChange}
+        handleAddProduct={handleAddProduct}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        selectedSubcategories={selectedSubcategories}
+        customStyles={customStyles}
+        newProduct={newProduct}
+        categories={categories}
+        setSelectedSubcategories={setSelectedSubcategories}
+        animatedComponents={animatedComponents}
+      />
+      {/* update Product Modal */}
+      <UpdateProductModal
+        isOpen={isUpdateModalOpen}
+        toggleUpdateModal={toggleUpdateModal}
+        handleUpdateInputChange={handleUpdateInputChange}
+        handleUpdateProduct={handleUpdateProduct}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        selectedSubcategories={selectedSubcategories}
+        customStyles={customStyles}
+        updateProduct={updateProduct}
+        categories={categories} // Corrected prop
+        setSelectedSubcategories={setSelectedSubcategories}
+        animatedComponents={animatedComponents}
+      />
+      {/* Delete Product Modal */}
+      <DeleteProductModal
+        isOpen={isDeleteModalOpen}
+        toggleDeleteModal={toggleDeleteModal}
+        handleDelete={handleDelete}
+        deleteProduct={deleteProduct}
+      />
     </React.Fragment>
   );
 };
