@@ -19,32 +19,16 @@ import {
   Input,
 } from "reactstrap";
 import Breadcrumbs from "../../Components/Common/Breadcrumb";
-import Select from "react-select";
-import AsyncCreatableSelect from "react-select/async-creatable";
 import makeAnimated from "react-select/animated";
 import CreatableSelect from "react-select/creatable";
-import { flavourOptions } from "../../Data";
-import DeleteCategoryModal from "./DeleteCatModal";
 const animatedComponents = makeAnimated();
-
-const options = [
-  { value: "chocolate", label: "Chocolate" },
-  { value: "strawberry", label: "Strawberry" },
-  { value: "vanilla", label: "Vanilla" },
-];
 interface Category {
   id: number;
   name: string;
   parentId?: number | null;
 }
 
-interface InputProps {
-  type: string;
-  value?: string | number | readonly string[];
-  onChange?: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => void;
-}
+
 
 const handleDelete = (
   deleteCategory: Category | null,
@@ -126,13 +110,6 @@ const AllCategories: React.FC = () => {
 
   document.title = "Basic Tables | Admin & Dashboard";
 
-  // const [categories, setCategories] = useState<Category[]>([
-  //   { id: 1, name: "marble" },
-  //   { id: 2, name: "Stone" },
-  //   { id: 3, name: "Granite" },
-  //   // Add more categories as needed
-  // ]);
-  const [currentCategory, setCurrentCategory] = useState("marble");
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteCategory, setDeleteCategory] = useState<Category | null>(null);
   const [isAddModalOpen, setAddModalOpen] = useState(false);
@@ -143,9 +120,6 @@ const AllCategories: React.FC = () => {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [editedCategory, setEditedCategory] = useState<Category | null>(null);
 
-  const handleCategoryChange = (category: string) => {
-    setCurrentCategory(category);
-  };
 
   const toggleDeleteModal = () => {
     setDeleteModalOpen(!isDeleteModalOpen);
@@ -204,19 +178,6 @@ const AllCategories: React.FC = () => {
   };
 
   ////////////////////////////////
-
-  const [inputValue, setInputValue] = useState("");
-
-  const handleCreateOption = (inputValue: string) => {
-    const newOption = { value: inputValue.toLowerCase(), label: inputValue };
-    return newOption;
-  };
-
-  const loadOptions = (inputValue: string, callback: any) => {
-    // You can fetch or process options dynamically here
-    const filteredOptions = [{ value: inputValue, label: inputValue }];
-    callback(filteredOptions);
-  };
 
   const customStyles = {
     option: (provided, state) => ({
@@ -417,7 +378,7 @@ const AllCategories: React.FC = () => {
       <Modal isOpen={isEditModalOpen} toggle={toggleEditModal}>
         <ModalHeader toggle={toggleEditModal}>Edit Category</ModalHeader>
         <ModalBody>
-        <Form>
+          <Form>
             <FormGroup>
               <Label for="exampleSelect">Categories</Label>
               <Input
@@ -478,7 +439,6 @@ const AllCategories: React.FC = () => {
           </Button>
         </ModalFooter>
       </Modal>
-
 
       {/* delet modales  */}
     </React.Fragment>
