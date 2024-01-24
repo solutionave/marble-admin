@@ -17,11 +17,11 @@ const Sidebar = (props: any) => {
         <div className="navbar-brand-box">
           <Link to="/" className="logo logo-dark">
             <span className="logo-sm">
-            MARBLE
+            
               {/* <img src={logo} alt="" height="22" /> */}
             </span>
             <span className="logo-lg">
-            MARBLE
+           
               {/* <img src={logoDark} alt="" height="17" /> */}
               
             </span>
@@ -29,7 +29,7 @@ const Sidebar = (props: any) => {
 
           <Link to="/" className="logo logo-light">
             <span className="logo-sm">
-              MARBLE
+             
               {/* <img src={logoLightSvg} alt="" height="22" /> */}
             </span>
             <span className="logo-lg">

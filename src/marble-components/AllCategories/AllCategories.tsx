@@ -22,8 +22,8 @@ import Breadcrumbs from "../../Components/Common/Breadcrumb";
 import Select from "react-select";
 import AsyncCreatableSelect from "react-select/async-creatable";
 import makeAnimated from "react-select/animated";
-import CreatableSelect from 'react-select/creatable';
-import { flavourOptions } from '../../Data';
+import CreatableSelect from "react-select/creatable";
+import { flavourOptions } from "../../Data";
 const animatedComponents = makeAnimated();
 
 const options = [
@@ -62,14 +62,75 @@ const handleDelete = (
 };
 
 const AllCategories: React.FC = () => {
-  document.title = "Basic Tables | Skote - React Admin & Dashboard Template";
+  const categories = [
+    {
+      id: 1,
+      name: "marble",
+      subcategories: [
+        {
+          id: 1,
+          name: "sub marble 1",
+        },
+        {
+          id: 2,
+          name: "sub marble 2",
+        },
+        {
+          id: 3,
+          name: "sub marble 3",
+        },
+      ],
+    },
+    {
+      id: 2,
+      name: "Stone",
+      subcategories: [
+        {
+          id: 1,
+          name: "sub stone 1",
+        },
+        {
+          id: 2,
+          name: "sub stone 2",
+        },
+        {
+          id: 3,
+          name: "sub stone 3",
+        },
+      ],
+    },
+    {
+      id: 3,
+      name: "Granite",
+      subcategories: [
+        {
+          id: 1,
+          name: "sub granite 1",
+        },
+        {
+          id: 2,
+          name: "sub granite 2",
+        },
+        {
+          id: 3,
+          name: "sub granite 3",
+        },
+      ],
+    },
+  ];
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedSubcategories, setSelectedSubcategories] = useState<
+    { id: number; name: string }[]
+  >([]);
 
-  const [categories, setCategories] = useState<Category[]>([
-    { id: 1, name: "marble" },
-    { id: 2, name: "Stone" },
-    { id: 3, name: "Granite" },
-    // Add more categories as needed
-  ]);
+  document.title = "Basic Tables | Admin & Dashboard";
+
+  // const [categories, setCategories] = useState<Category[]>([
+  //   { id: 1, name: "marble" },
+  //   { id: 2, name: "Stone" },
+  //   { id: 3, name: "Granite" },
+  //   // Add more categories as needed
+  // ]);
   const [currentCategory, setCurrentCategory] = useState("marble");
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteCategory, setDeleteCategory] = useState<Category | null>(null);
@@ -154,11 +215,6 @@ const AllCategories: React.FC = () => {
     // You can fetch or process options dynamically here
     const filteredOptions = [{ value: inputValue, label: inputValue }];
     callback(filteredOptions);
-
-
-    
-
-
   };
 
   const customStyles = {
@@ -280,7 +336,7 @@ const AllCategories: React.FC = () => {
               handleDelete(
                 deleteCategory,
                 categories,
-                setCategories,
+                setSelectedSubcategories,
                 toggleDeleteModal
               )
             }
@@ -298,34 +354,42 @@ const AllCategories: React.FC = () => {
         <ModalBody>
           <Form>
             <FormGroup>
-              <Label for="newCategory">Category Name</Label>
+              <Label for="exampleSelect">Categories</Label>
               <Input
-                type="text"
-                id="newCategory"
-                value={newCategory}
-                onChange={(e) => setNewCategory(e.target.value)}
-              />
-            </FormGroup>
-<FormGroup>
-<Label for="newCategory">Subcategory</Label>
-<CreatableSelect
-      isMulti
-      components={animatedComponents}
-      options={flavourOptions}
-      styles={customStyles}
-    />
+                id="exampleSelect"
+                name="select"
+                type="select"
+                value={selectedCategory}
+                onChange={(e) => {
+                  const selectedCategory = e.target.value;
+                  setSelectedCategory(selectedCategory);
 
-            {/* <AsyncCreatableSelect
-              closeMenuOnSelect={false}
-              components={animatedComponents}
+                  // Dynamically load subcategories based on the selected category
+                  const category = categories.find(
+                    (cat) => cat.name === selectedCategory
+                  );
+                  if (category) {
+                    setSelectedSubcategories(category.subcategories);
+                  }
+                }}
+              >
+                <option value="">Select Category</option>
+                {categories.map((cat) => (
+                  <option key={cat.id}>{cat.name}</option>
+                ))}
+              </Input>
+            </FormGroup>
+
+            <Label for="productLocation">Subcategories</Label>
+            <CreatableSelect
               isMulti
-              onCreateOption={handleCreateOption}
-              loadOptions={(inputValue, callback) =>
-                loadOptions(inputValue, callback)
-              }
-              onInputChange={(input: string) => setInputValue(input)}
-            /> */}
-</FormGroup>
+              components={animatedComponents}
+              options={selectedSubcategories.map((subCat) => ({
+                value: subCat.name,
+                label: subCat.name,
+              }))}
+              styles={customStyles}
+            />
           </Form>
         </ModalBody>
         <ModalFooter>
@@ -336,7 +400,7 @@ const AllCategories: React.FC = () => {
                 newCategory,
                 selectedParentCategory,
                 categories,
-                setCategories,
+                setSelectedSubcategories,
                 toggleAddModal
               )
             }
@@ -352,41 +416,44 @@ const AllCategories: React.FC = () => {
       <Modal isOpen={isEditModalOpen} toggle={toggleEditModal}>
         <ModalHeader toggle={toggleEditModal}>Edit Category</ModalHeader>
         <ModalBody>
-          <Form>
+        <Form>
             <FormGroup>
-              <Label for="editCategory">Category Name</Label>
+              <Label for="exampleSelect">Categories</Label>
               <Input
-                type="text"
-                id="editCategory"
-                value={editedCategory?.name || ""}
-                onChange={(e) =>
-                  setEditedCategory((prev) => ({
-                    ...prev!,
-                    name: e.target.value,
-                  }))
-                }
-              />
-            </FormGroup>
-            <FormGroup>
-            <Label for="newCategory">Subcategory</Label>
+                id="exampleSelect"
+                name="select"
+                type="select"
+                value={selectedCategory}
+                onChange={(e) => {
+                  const selectedCategory = e.target.value;
+                  setSelectedCategory(selectedCategory);
 
-            <CreatableSelect
-      isMulti
-      components={animatedComponents}
-      options={flavourOptions}
-      styles={customStyles}
-    />
-            {/* <AsyncCreatableSelect
-              closeMenuOnSelect={false}
-              components={animatedComponents}
-              isMulti
-              onCreateOption={handleCreateOption}
-              loadOptions={(inputValue, callback) =>
-                loadOptions(inputValue, callback)
-              }
-              onInputChange={(input: string) => setInputValue(input)}
-            /> */}
+                  // Dynamically load subcategories based on the selected category
+                  const category = categories.find(
+                    (cat) => cat.name === selectedCategory
+                  );
+                  if (category) {
+                    setSelectedSubcategories(category.subcategories);
+                  }
+                }}
+              >
+                <option value="">Select Category</option>
+                {categories.map((cat) => (
+                  <option key={cat.id}>{cat.name}</option>
+                ))}
+              </Input>
             </FormGroup>
+
+            <Label for="productLocation">Subcategories</Label>
+            <CreatableSelect
+              isMulti
+              components={animatedComponents}
+              options={selectedSubcategories.map((subCat) => ({
+                value: subCat.name,
+                label: subCat.name,
+              }))}
+              styles={customStyles}
+            />
           </Form>
         </ModalBody>
         <ModalFooter>
@@ -398,7 +465,7 @@ const AllCategories: React.FC = () => {
                 editedCategory?.name || "",
                 editedCategory?.parentId || null,
                 categories,
-                setCategories,
+                setSelectedSubcategories,
                 toggleEditModal
               )
             }

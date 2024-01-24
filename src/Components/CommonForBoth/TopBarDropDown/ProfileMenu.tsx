@@ -12,6 +12,7 @@ import { createSelector } from 'reselect';
 import user1 from "../../../assets/images/users/avatar-1.jpg";
 
 import { useSelector } from "react-redux";
+import { CgProfile } from "react-icons/cg";
 
 const ProfileMenu = (props: any) => {
   // Declare a new state variable, which we'll call "menu"
@@ -55,20 +56,21 @@ const ProfileMenu = (props: any) => {
           id="page-header-user-dropdown"
           tag="button"
         >
-          <img
+          <CgProfile size={30}/>
+          {/* <img
             className="rounded-circle header-profile-user"
             src={user1}
             alt="Header Avatar"
-          />
+          /> */}
           <span className="d-none d-xl-inline-block ms-2 me-1">{username || "admin"}</span>
           <i className="mdi mdi-chevron-down d-none d-xl-inline-block" />
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-end">
-          <DropdownItem tag="a" href={process.env.PUBLIC_URL + "/profile"}>
+          {/* <DropdownItem tag="a" href={process.env.PUBLIC_URL + "/profile"}>
             {" "}
             <i className="bx bx-user font-size-16 align-middle me-1" />
             {props.t("Profile")}{" "}
-          </DropdownItem>
+          </DropdownItem> */}
           {/* <DropdownItem tag="a" href={process.env.PUBLIC_URL + "/crypto-wallet"}>
             <i className="bx bx-wallet font-size-16 align-middle me-1" />
             {props.t("My Wallet")}

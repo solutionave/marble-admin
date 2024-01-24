@@ -41,7 +41,7 @@ interface Product {
 const AllProducts = () => {
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
-  document.title = "Basic Tables | Skote - React Admin & Dashboard Template";
+  document.title = "Basic Tables | Admin & Dashboard";
 
   const [marbleProducts, setMarbleProducts] = useState([
     {

@@ -15,7 +15,7 @@ const WelComeback: React.FC = () => {
             <Col xs={7}>
               <div className="text-primary p-3">
                 <h5 className="text-primary">Welcome Back !</h5>
-                <p>Skote Dashboard</p>
+                <p> Dashboard</p>
               </div>
             </Col>
             <Col xs={5} className="align-self-end">
@@ -28,7 +28,7 @@ const WelComeback: React.FC = () => {
             <Col sm={4}>
               <div className="avatar-md profile-user-wid mb-4">
                 <img
-                  src={avatar1}
+                  src={profileImg}
                   alt=""
                   className="img-thumbnail rounded-circle"
                 />

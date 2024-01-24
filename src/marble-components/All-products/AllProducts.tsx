@@ -26,12 +26,12 @@ import Breadcrumbs from "../../Components/Common/Breadcrumb";
 import AllProductsDetail from "./AllProductsDetail";
 import AsyncCreatableSelect from "react-select/async-creatable";
 import makeAnimated from "react-select/animated";
-import CreatableSelect from 'react-select/creatable';
-import { stateOptions } from '../../Data';
+import CreatableSelect from "react-select/creatable";
+import { stateOptions } from "../../Data";
 const animatedComponents = makeAnimated();
 
 const AllProducts = () => {
-  document.title = "Basic Tables | Skote - React Admin & Dashboard Template";
+  document.title = "Basic Tables | Admin & Dashboard";
 
   const [marbleProducts, setMarbleProducts] = useState([
     {
@@ -86,6 +86,62 @@ const AllProducts = () => {
     },
   ]);
 
+  const categories = [
+    {
+      id: 1,
+      name: "marble",
+      subcategories: [
+        {
+          id: 1,
+          name: "sub marble 1",
+        },
+        {
+          id: 2,
+          name: "sub marble 2",
+        },
+        {
+          id: 3,
+          name: "sub marble 3",
+        },
+      ],
+    },
+    {
+      id: 2,
+      name: "Stone",
+      subcategories: [
+        {
+          id: 1,
+          name: "sub stone 1",
+        },
+        {
+          id: 2,
+          name: "sub stone 2",
+        },
+        {
+          id: 3,
+          name: "sub stone 3",
+        },
+      ],
+    },
+    {
+      id: 3,
+      name: "Granite",
+      subcategories: [
+        {
+          id: 1,
+          name: "sub granite 1",
+        },
+        {
+          id: 2,
+          name: "sub granite 2",
+        },
+        {
+          id: 3,
+          name: "sub granite 3",
+        },
+      ],
+    },
+  ];
   const [viewdata, setviewdata] = useState("");
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteProduct, setDeleteProduct] = useState<{
@@ -247,7 +303,6 @@ const AllProducts = () => {
     toggleUpdateModal();
   };
 
-
   const customStyles = {
     option: (provided, state) => ({
       ...provided,
@@ -255,6 +310,11 @@ const AllProducts = () => {
       color: state.isSelected ? "white" : "black", // Change text color based on the selection state
     }),
   };
+
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedSubcategories, setSelectedSubcategories] = useState<
+    { id: number; name: string }[]
+  >([]);
 
   return (
     <React.Fragment>
@@ -278,7 +338,7 @@ const AllProducts = () => {
                           <th>Product Image</th>
                           <th>Description</th>
                           <th>Price</th>
-                          <th>Location</th>
+                          <th>Category</th>
                           <th>Actions</th>
                         </tr>
                       </thead>
@@ -415,56 +475,64 @@ const AllProducts = () => {
             <FormGroup>
               <Label for="productPrice">Product Price</Label>
               <Input
-                type="text"
+                type="number"
                 name="price"
                 id="productPrice"
                 value={newProduct.price}
                 onChange={handleInputChange}
               />
             </FormGroup>
+
             <FormGroup>
-              <Label for="productImage">Product Image URL</Label>
+              <Label for="exampleSelect">Categories</Label>
               <Input
-                type="file"
-                name="image"
-                id="productImage"
-                value={newProduct.image}
-                onChange={handleInputChange}
-              />
+                id="exampleSelect"
+                name="select"
+                type="select"
+                value={selectedCategory}
+                onChange={(e) => {
+                  const selectedCategory = e.target.value;
+                  setSelectedCategory(selectedCategory);
+
+                  // Dynamically load subcategories based on the selected category
+                  const category = categories.find(
+                    (cat) => cat.name === selectedCategory
+                  );
+                  if (category) {
+                    setSelectedSubcategories(category.subcategories);
+                  }
+                }}
+              >
+                <option value="">Select Category</option>
+                {categories.map((cat) => (
+                  <option key={cat.id}>{cat.name}</option>
+                ))}
+              </Input>
             </FormGroup>
 
-            <Label for="productLocation">Product Location</Label>
-             <CreatableSelect
-      isMulti
-      components={animatedComponents}
-      options={stateOptions}
-      styles={customStyles}
-    />
-
-
-
-            
-{/*             
-            <AsyncCreatableSelect
-              closeMenuOnSelect={false}
-              components={animatedComponents}
+            <Label for="productLocation">Subcategories</Label>
+            <CreatableSelect
               isMulti
-              onCreateOption={handleCreateOption}
-              loadOptions={(inputValue, callback) =>
-                loadOptions(inputValue, callback)
-              }
-              onInputChange={(input: string) => setInputValue(input)}
-            /> */}
+              components={animatedComponents}
+              options={selectedSubcategories.map((subCat) => ({
+                value: subCat.name,
+                label: subCat.name,
+              }))}
+              styles={customStyles}
+            />
 
-            {/* <FormGroup>
-              <Input
-                type="text"
-                name="location"
-                id="productLocation"
-                value={newProduct.location}
-                onChange={handleInputChange}
-              />
-            </FormGroup> */}
+            <Col md={"6"} className="mt-3">
+              <FormGroup>
+                <Label for="productImage">Product Image URL</Label>
+                <Input
+                  type="file"
+                  name="image"
+                  id="productImage"
+                  value={newProduct.image}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+            </Col>
           </Form>
         </ModalBody>
         <ModalFooter>
@@ -507,53 +575,64 @@ const AllProducts = () => {
             <FormGroup>
               <Label for="updateProductPrice">Product Price</Label>
               <Input
-                type="text"
+                type="number"
                 name="price"
                 id="updateProductPrice"
                 value={updateProduct.price}
                 onChange={handleUpdateInputChange}
               />
             </FormGroup>
+
             <FormGroup>
-              <Label for="updateProductImage">Product Image URL</Label>
+              <Label for="exampleSelect">Categories</Label>
               <Input
-                type="file"
-                name="image"
-                id="updateProductImage"
-                // value={updateProduct.image}
-                onChange={handleUpdateInputChange}
-              />
+                id="exampleSelect"
+                name="select"
+                type="select"
+                value={selectedCategory}
+                onChange={(e) => {
+                  const selectedCategory = e.target.value;
+                  setSelectedCategory(selectedCategory);
+
+                  // Dynamically load subcategories based on the selected category
+                  const category = categories.find(
+                    (cat) => cat.name === selectedCategory
+                  );
+                  if (category) {
+                    setSelectedSubcategories(category.subcategories);
+                  }
+                }}
+              >
+                <option value="">Select Category</option>
+                {categories.map((cat) => (
+                  <option key={cat.id}>{cat.name}</option>
+                ))}
+              </Input>
             </FormGroup>
 
-            <Label for="productLocation">Product Location</Label>
+            <Label for="productLocation">Subcategories</Label>
             <CreatableSelect
-      isMulti
-      components={animatedComponents}
-      options={stateOptions}
-      styles={customStyles}
-    />
-
-            {/* <AsyncCreatableSelect
-              closeMenuOnSelect={false}
-              components={animatedComponents}
               isMulti
-              onCreateOption={handleCreateOption}
-              loadOptions={(inputValue, callback) =>
-                loadOptions(inputValue, callback)
-              }
-              onInputChange={(input: string) => setInputValue(input)}
-            /> */}
+              components={animatedComponents}
+              options={selectedSubcategories.map((subCat) => ({
+                value: subCat.name,
+                label: subCat.name,
+              }))}
+              styles={customStyles}
+            />
 
-            {/* <FormGroup>
-              <Label for="updateProductLocation">Product Location</Label>
-              <Input
-                type="text"
-                name="location"
-                id="updateProductLocation"
-                value={updateProduct.location}
-                onChange={handleUpdateInputChange}
-              />
-            </FormGroup> */}
+            <Col md={"6"} className="mt-3">
+              <FormGroup>
+                <Label for="updateProductImage">Product Image URL</Label>
+                <Input
+                  type="file"
+                  name="image"
+                  id="updateProductImage"
+                  // value={updateProduct.image}
+                  onChange={handleUpdateInputChange}
+                />
+              </FormGroup>
+            </Col>
           </Form>
         </ModalBody>
         <ModalFooter>
