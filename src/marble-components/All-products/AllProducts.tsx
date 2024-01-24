@@ -26,6 +26,8 @@ import Breadcrumbs from "../../Components/Common/Breadcrumb";
 import AllProductsDetail from "./AllProductsDetail";
 import AsyncCreatableSelect from "react-select/async-creatable";
 import makeAnimated from "react-select/animated";
+import CreatableSelect from 'react-select/creatable';
+import { stateOptions } from '../../Data';
 const animatedComponents = makeAnimated();
 
 const AllProducts = () => {
@@ -245,6 +247,15 @@ const AllProducts = () => {
     toggleUpdateModal();
   };
 
+
+  const customStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected ? "blue" : "white", // Change the background color based on the selection state
+      color: state.isSelected ? "white" : "black", // Change text color based on the selection state
+    }),
+  };
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -423,6 +434,17 @@ const AllProducts = () => {
             </FormGroup>
 
             <Label for="productLocation">Product Location</Label>
+             <CreatableSelect
+      isMulti
+      components={animatedComponents}
+      options={stateOptions}
+      styles={customStyles}
+    />
+
+
+
+            
+{/*             
             <AsyncCreatableSelect
               closeMenuOnSelect={false}
               components={animatedComponents}
@@ -432,7 +454,7 @@ const AllProducts = () => {
                 loadOptions(inputValue, callback)
               }
               onInputChange={(input: string) => setInputValue(input)}
-            />
+            /> */}
 
             {/* <FormGroup>
               <Input
@@ -504,7 +526,14 @@ const AllProducts = () => {
             </FormGroup>
 
             <Label for="productLocation">Product Location</Label>
-            <AsyncCreatableSelect
+            <CreatableSelect
+      isMulti
+      components={animatedComponents}
+      options={stateOptions}
+      styles={customStyles}
+    />
+
+            {/* <AsyncCreatableSelect
               closeMenuOnSelect={false}
               components={animatedComponents}
               isMulti
@@ -513,7 +542,7 @@ const AllProducts = () => {
                 loadOptions(inputValue, callback)
               }
               onInputChange={(input: string) => setInputValue(input)}
-            />
+            /> */}
 
             {/* <FormGroup>
               <Label for="updateProductLocation">Product Location</Label>

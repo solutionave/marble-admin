@@ -22,6 +22,8 @@ import Breadcrumbs from "../../Components/Common/Breadcrumb";
 import Select from "react-select";
 import AsyncCreatableSelect from "react-select/async-creatable";
 import makeAnimated from "react-select/animated";
+import CreatableSelect from 'react-select/creatable';
+import { flavourOptions } from '../../Data';
 const animatedComponents = makeAnimated();
 
 const options = [
@@ -152,6 +154,19 @@ const AllCategories: React.FC = () => {
     // You can fetch or process options dynamically here
     const filteredOptions = [{ value: inputValue, label: inputValue }];
     callback(filteredOptions);
+
+
+    
+
+
+  };
+
+  const customStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected ? "blue" : "white", // Change the background color based on the selection state
+      color: state.isSelected ? "white" : "black", // Change text color based on the selection state
+    }),
   };
 
   return (
@@ -291,8 +306,16 @@ const AllCategories: React.FC = () => {
                 onChange={(e) => setNewCategory(e.target.value)}
               />
             </FormGroup>
+<FormGroup>
+<Label for="newCategory">Subcategory</Label>
+<CreatableSelect
+      isMulti
+      components={animatedComponents}
+      options={flavourOptions}
+      styles={customStyles}
+    />
 
-            <AsyncCreatableSelect
+            {/* <AsyncCreatableSelect
               closeMenuOnSelect={false}
               components={animatedComponents}
               isMulti
@@ -301,7 +324,8 @@ const AllCategories: React.FC = () => {
                 loadOptions(inputValue, callback)
               }
               onInputChange={(input: string) => setInputValue(input)}
-            />
+            /> */}
+</FormGroup>
           </Form>
         </ModalBody>
         <ModalFooter>
@@ -343,7 +367,16 @@ const AllCategories: React.FC = () => {
                 }
               />
             </FormGroup>
-            <AsyncCreatableSelect
+            <FormGroup>
+            <Label for="newCategory">Subcategory</Label>
+
+            <CreatableSelect
+      isMulti
+      components={animatedComponents}
+      options={flavourOptions}
+      styles={customStyles}
+    />
+            {/* <AsyncCreatableSelect
               closeMenuOnSelect={false}
               components={animatedComponents}
               isMulti
@@ -352,7 +385,8 @@ const AllCategories: React.FC = () => {
                 loadOptions(inputValue, callback)
               }
               onInputChange={(input: string) => setInputValue(input)}
-            />
+            /> */}
+            </FormGroup>
           </Form>
         </ModalBody>
         <ModalFooter>
