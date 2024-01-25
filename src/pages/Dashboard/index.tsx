@@ -26,7 +26,7 @@ interface selectState {
 
 const Dashboard = () => {
 
-  document.title = "Dashboards |  - React Admin & Dashboard Template";
+  document.title = "Dashboard";
 
   const [subScribeModal, setSubScribeModal] = useState<boolean>(false);
 

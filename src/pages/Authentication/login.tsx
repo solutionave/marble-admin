@@ -25,7 +25,7 @@ const Login = (props: any) => {
   const dispatch: any = useDispatch();
 
   //meta title
-  document.title = "Login | Skote - React Admin & Dashboard Template";
+  document.title = "Login";
 
 
   const selectProperties = createSelector(

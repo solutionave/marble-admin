@@ -23,7 +23,7 @@ import UpdateProductModal from "./ProductUpdateModal";
 const animatedComponents = makeAnimated();
 
 const AllProducts = () => {
-  document.title = "Basic Tables | Admin & Dashboard";
+  document.title = "Manage Products";
 
   const [marbleProducts, setMarbleProducts] = useState([
     {

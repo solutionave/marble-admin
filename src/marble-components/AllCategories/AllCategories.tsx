@@ -100,7 +100,7 @@ const AllCategories: React.FC = () => {
     { id: number; name: string }[]
   >([]);
 
-  document.title = "Basic Tables | Admin & Dashboard";
+  document.title = "Manage Categories";
 
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteCategory, setDeleteCategory] = useState<Category | null>(null);
@@ -141,7 +141,7 @@ const AllCategories: React.FC = () => {
         parentId,
       };
 
-      console.log("Adding category:", newCategoryObject);
+      console.log("Adding Categories:", newCategoryObject);
 
       setCategories([...categories, newCategoryObject]);
       toggleAddModal();
