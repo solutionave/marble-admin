@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 // Redux
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Row, Col, CardBody, Card, Container, Form, Input, Label, FormFeedback, Alert } from "reactstrap";
 
 // Formik validation
@@ -43,7 +43,7 @@ const Login = (props: any) => {
     enableReinitialize: true,
 
     initialValues: {
-      email: "admin@themesbrand.com" || '',
+      email: "admin@solutionave.com" || '',
       password: "123456" || '',
     },
     validationSchema: Yup.object({
@@ -70,6 +70,8 @@ const Login = (props: any) => {
       }, 3000);
     }
   }, [dispatch, error])
+
+  const navigate =useNavigate()
 
   return (
     <React.Fragment>
@@ -122,8 +124,11 @@ const Login = (props: any) => {
                     <Form className="form-horizontal"
                       onSubmit={(e) => {
                         e.preventDefault();
-                        validation.handleSubmit();
-                        return false;
+                        // validation.handleSubmit();
+
+                        navigate('/dashboard')
+
+                        return true;
                       }}
                     >
                       <div className="mb-3">
