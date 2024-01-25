@@ -9,26 +9,18 @@ import {
   Pagination,
   PaginationItem,
   PaginationLink,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Form,
-  FormGroup,
-  Label,
-  Input,
 } from "reactstrap";
 import Breadcrumbs from "../../Components/Common/Breadcrumb";
 import makeAnimated from "react-select/animated";
-import CreatableSelect from "react-select/creatable";
+import DeleteCategoryModal from "./DeleteCatModal";
+import AddCatModal from "./AddCatModal";
+import UpdateCatModal from "./UpdateCatModal";
 const animatedComponents = makeAnimated();
 interface Category {
   id: number;
   name: string;
   parentId?: number | null;
 }
-
-
 
 const handleDelete = (
   deleteCategory: Category | null,
@@ -120,7 +112,6 @@ const AllCategories: React.FC = () => {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [editedCategory, setEditedCategory] = useState<Category | null>(null);
 
-
   const toggleDeleteModal = () => {
     setDeleteModalOpen(!isDeleteModalOpen);
   };
@@ -178,14 +169,6 @@ const AllCategories: React.FC = () => {
   };
 
   ////////////////////////////////
-
-  const customStyles = {
-    option: (provided, state) => ({
-      ...provided,
-      backgroundColor: state.isSelected ? "blue" : "white", // Change the background color based on the selection state
-      color: state.isSelected ? "white" : "black", // Change text color based on the selection state
-    }),
-  };
 
   return (
     <React.Fragment>
@@ -284,163 +267,45 @@ const AllCategories: React.FC = () => {
         </div>
       </div>
 
-      <Modal isOpen={isDeleteModalOpen} toggle={toggleDeleteModal}>
-        <ModalHeader toggle={toggleDeleteModal}>
-          Delete Confirmation
-        </ModalHeader>
-        <ModalBody>
-          Are you sure to delete {deleteCategory && deleteCategory.name}?
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            color="danger"
-            onClick={() =>
-              handleDelete(
-                deleteCategory,
-                categories,
-                setSelectedSubcategories,
-                toggleDeleteModal
-              )
-            }
-          >
-            Delete
-          </Button>{" "}
-          <Button color="secondary" onClick={toggleDeleteModal}>
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Modal>
+      {/* add modal  */}
+      <AddCatModal
+        isAddModalOpen={isAddModalOpen}
+        toggleAddModal={toggleAddModal}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        categories={categories}
+        setSelectedSubcategories={setSelectedSubcategories}
+        animatedComponents={animatedComponents}
+        selectedSubcategories={selectedSubcategories}
+        handleAddCategory={handleAddCategory}
+        newCategory={newCategory}
+        selectedParentCategory={selectedParentCategory}
+      />
 
-      <Modal isOpen={isAddModalOpen} toggle={toggleAddModal}>
-        <ModalHeader toggle={toggleAddModal}>Add New Category</ModalHeader>
-        <ModalBody>
-          <Form>
-            <FormGroup>
-              <Label for="exampleSelect">Categories</Label>
-              <Input
-                id="exampleSelect"
-                name="select"
-                type="select"
-                value={selectedCategory}
-                onChange={(e) => {
-                  const selectedCategory = e.target.value;
-                  setSelectedCategory(selectedCategory);
+      {/* edit modal  */}
 
-                  // Dynamically load subcategories based on the selected category
-                  const category = categories.find(
-                    (cat) => cat.name === selectedCategory
-                  );
-                  if (category) {
-                    setSelectedSubcategories(category.subcategories);
-                  }
-                }}
-              >
-                <option value="">Select Category</option>
-                {categories.map((cat) => (
-                  <option key={cat.id}>{cat.name}</option>
-                ))}
-              </Input>
-            </FormGroup>
-
-            <Label for="productLocation">Subcategories</Label>
-            <CreatableSelect
-              isMulti
-              components={animatedComponents}
-              options={selectedSubcategories.map((subCat) => ({
-                value: subCat.name,
-                label: subCat.name,
-              }))}
-              styles={customStyles}
-            />
-          </Form>
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            color="primary"
-            onClick={() =>
-              handleAddCategory(
-                newCategory,
-                selectedParentCategory,
-                categories,
-                setSelectedSubcategories,
-                toggleAddModal
-              )
-            }
-          >
-            Add Category
-          </Button>{" "}
-          <Button color="secondary" onClick={toggleAddModal}>
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Modal>
-
-      <Modal isOpen={isEditModalOpen} toggle={toggleEditModal}>
-        <ModalHeader toggle={toggleEditModal}>Edit Category</ModalHeader>
-        <ModalBody>
-          <Form>
-            <FormGroup>
-              <Label for="exampleSelect">Categories</Label>
-              <Input
-                id="exampleSelect"
-                name="select"
-                type="select"
-                value={selectedCategory}
-                onChange={(e) => {
-                  const selectedCategory = e.target.value;
-                  setSelectedCategory(selectedCategory);
-
-                  // Dynamically load subcategories based on the selected category
-                  const category = categories.find(
-                    (cat) => cat.name === selectedCategory
-                  );
-                  if (category) {
-                    setSelectedSubcategories(category.subcategories);
-                  }
-                }}
-              >
-                <option value="">Select Category</option>
-                {categories.map((cat) => (
-                  <option key={cat.id}>{cat.name}</option>
-                ))}
-              </Input>
-            </FormGroup>
-
-            <Label for="productLocation">Subcategories</Label>
-            <CreatableSelect
-              isMulti
-              components={animatedComponents}
-              options={selectedSubcategories.map((subCat) => ({
-                value: subCat.name,
-                label: subCat.name,
-              }))}
-              styles={customStyles}
-            />
-          </Form>
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            color="primary"
-            onClick={() =>
-              handleEditCategory(
-                editedCategory,
-                editedCategory?.name || "",
-                editedCategory?.parentId || null,
-                categories,
-                setSelectedSubcategories,
-                toggleEditModal
-              )
-            }
-          >
-            Save Changes
-          </Button>{" "}
-          <Button color="secondary" onClick={toggleEditModal}>
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Modal>
+      <UpdateCatModal
+        isEditModalOpen={isEditModalOpen}
+        toggleEditModal={toggleEditModal}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        categories={categories}
+        setSelectedSubcategories={setSelectedSubcategories}
+        animatedComponents={animatedComponents}
+        selectedSubcategories={selectedSubcategories}
+        editedCategory={editedCategory}
+        handleEditCategory={handleEditCategory}
+      />
 
       {/* delet modales  */}
+      <DeleteCategoryModal
+        categories={categories}
+        setSelectedSubcategories={setSelectedSubcategories}
+        isDeleteModalOpen={isDeleteModalOpen}
+        toggleDeleteModal={toggleDeleteModal}
+        handleDelete={handleDelete}
+        deleteCategory={deleteCategory}
+      />
     </React.Fragment>
   );
 };
