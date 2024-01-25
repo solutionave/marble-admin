@@ -83,7 +83,7 @@ const Login = (props: any) => {
                     <Col className="col-7">
                       <div className="text-primary p-4">
                         <h5 className="text-primary">Welcome Back !</h5>
-                        <p>Sign in to continue to Skote.</p>
+                        {/* <p>Sign in to continue to Skote.</p> */}
                       </div>
                     </Col>
                     <Col className="col-5 align-self-end">
@@ -108,12 +108,12 @@ const Login = (props: any) => {
                     <Link to="/" className="auth-logo-dark">
                       <div className="avatar-md profile-user-wid mb-4">
                         <span className="avatar-title rounded-circle bg-light">
-                          <img
+                          {/* <img
                             src={logo}
                             alt=""
                             className="rounded-circle"
                             height="34"
-                          />
+                          /> */}
                         </span>
                       </div>
                     </Link>
@@ -251,10 +251,10 @@ const Login = (props: any) => {
                     Signup now{" "}
                   </Link>{" "}
                 </p>
-                <p>
-                  © {new Date().getFullYear()} Skote. Crafted with{" "}
+                {/* <p>
+                  © {new Date().getFullYear()}  Crafted with{" "}
                   <i className="mdi mdi-heart text-danger" /> by Themesbrand
-                </p>
+                </p> */}
               </div>
             </Col>
           </Row>
