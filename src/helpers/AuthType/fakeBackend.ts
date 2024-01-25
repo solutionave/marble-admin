@@ -36,7 +36,7 @@ import {
   statisticsApplications,
   mailDB,
   jobListCandidate,
-  jobsGridData
+  jobsGridData,
 } from "../../common/data";
 
 let users = [
@@ -45,7 +45,7 @@ let users = [
     username: "admin",
     role: "admin",
     password: "123456",
-    email: "admin@themesbrand.com",
+    email: "admin@solutionave.com",
   },
 ];
 
@@ -53,10 +53,10 @@ const fakeBackend = () => {
   // This sets the mock adapter on the default instance
   const mock = new MockAdapter(axios, { onNoMatch: "passthrough" });
 
-  mock.onPost(url.POST_FAKE_LOGIN).reply(config => {
+  mock.onPost(url.POST_FAKE_LOGIN).reply((config) => {
     const user = JSON.parse(config["data"]);
     const validUser = users.filter(
-      usr => usr.email === user.email && usr.password === user.password
+      (usr) => usr.email === user.email && usr.password === user.password
     );
 
     return new Promise((resolve, reject) => {
@@ -96,7 +96,7 @@ const fakeBackend = () => {
   mock.onPost("/post-jwt-login").reply((config: any) => {
     const user = JSON.parse(config["data"]);
     const validUser = users.filter(
-      usr => usr.email === user.email && usr.password === user.password
+      (usr) => usr.email === user.email && usr.password === user.password
     );
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -126,7 +126,7 @@ const fakeBackend = () => {
 
     let finalToken = one.Authorization;
 
-    const validUser = users.filter(usr => usr.uid === user.idx);
+    const validUser = users.filter((usr) => usr.uid === user.idx);
 
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -136,7 +136,7 @@ const fakeBackend = () => {
             let objIndex: any;
 
             //Find index of specific object using findIndex method.
-            objIndex = users.findIndex(obj => obj.uid === user.idx);
+            objIndex = users.findIndex((obj) => obj.uid === user.idx);
 
             //Update object's name property.
             users[objIndex].username = user.username;
@@ -159,18 +159,20 @@ const fakeBackend = () => {
   mock.onPost("/social-login").reply((config: any) => {
     const user = JSON.parse(config["data"]);
     return new Promise((resolve, reject) => {
-
       setTimeout(() => {
         if (user && user.token) {
           // You have to generate AccessToken by jwt. but this is fakeBackend so, right now its dummy
           const token = accessToken;
-          const first_name = user.name
-          const nodeapiToken = nodeApiToken
-          delete user.name
+          const first_name = user.name;
+          const nodeapiToken = nodeApiToken;
+          delete user.name;
 
           // JWT AccessToken
           const tokenObj = { accessToken: token, first_name: first_name }; // Token Obj
-          const validUserObj = { token: nodeapiToken, "data": { ...tokenObj, ...user } }; // validUser Obj
+          const validUserObj = {
+            token: nodeapiToken,
+            data: { ...tokenObj, ...user },
+          }; // validUser Obj
           resolve([200, validUserObj]);
         } else {
           reject([
@@ -192,19 +194,18 @@ const fakeBackend = () => {
     });
   });
 
-  mock.onPost(url.POST_EDIT_PROFILE).reply(config => {
+  mock.onPost(url.POST_EDIT_PROFILE).reply((config) => {
     const user = JSON.parse(config["data"]);
 
-    const validUser = users.filter(usr => usr.uid === user.idx);
+    const validUser = users.filter((usr) => usr.uid === user.idx);
 
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (validUser["length"] === 1) {
-
           let objIndex;
 
           //Find index of specific object using findIndex method.
-          objIndex = users.findIndex(obj => obj.uid === user.idx);
+          objIndex = users.findIndex((obj) => obj.uid === user.idx);
           //Update object's name property.
           users[objIndex].username = user.username;
 
@@ -234,7 +235,7 @@ const fakeBackend = () => {
     });
   });
 
-  mock.onPost(url.ADD_TASKS).reply(user => {
+  mock.onPost(url.ADD_TASKS).reply((user) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (user && user.data) {
@@ -260,7 +261,7 @@ const fakeBackend = () => {
     });
   });
 
-  mock.onDelete(url.DELETE_TASKS).reply(config => {
+  mock.onDelete(url.DELETE_TASKS).reply((config) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (config && config.headers) {
@@ -272,7 +273,6 @@ const fakeBackend = () => {
       });
     });
   });
-
 
   //Contact User Grid
   mock.onGet(url.GET_USERS).reply(() => {
@@ -288,7 +288,7 @@ const fakeBackend = () => {
     });
   });
 
-  mock.onPost(url.ADD_NEW_USERS).reply(user => {
+  mock.onPost(url.ADD_NEW_USERS).reply((user) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (user && user.data) {
@@ -314,7 +314,7 @@ const fakeBackend = () => {
     });
   });
 
-  mock.onDelete(url.DELETE_USERS).reply(config => {
+  mock.onDelete(url.DELETE_USERS).reply((config) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (config && config.headers) {
@@ -327,7 +327,7 @@ const fakeBackend = () => {
     });
   });
 
-  //Contact Profile 
+  //Contact Profile
   mock.onGet(url.GET_USER_PROFILE).reply(() => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -341,7 +341,7 @@ const fakeBackend = () => {
     });
   });
 
-  mock.onGet(new RegExp(`${url.GET_EARNING_DATA}/*`)).reply(config => {
+  mock.onGet(new RegExp(`${url.GET_EARNING_DATA}/*`)).reply((config) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         const { params } = config;
@@ -360,7 +360,7 @@ const fakeBackend = () => {
     });
   });
 
-  mock.onGet(new RegExp(`${url.TOP_SELLING_DATA}/*`)).reply(config => {
+  mock.onGet(new RegExp(`${url.TOP_SELLING_DATA}/*`)).reply((config) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         const { params } = config;
@@ -392,7 +392,7 @@ const fakeBackend = () => {
     });
   });
 
-  mock.onDelete(url.DELETE_JOB_LIST).reply(config => {
+  mock.onDelete(url.DELETE_JOB_LIST).reply((config) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (config && config.headers) {
@@ -405,7 +405,7 @@ const fakeBackend = () => {
     });
   });
 
-  mock.onPost(url.ADD_NEW_JOB_LIST).reply(job => {
+  mock.onPost(url.ADD_NEW_JOB_LIST).reply((job) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (job && job.data) {
@@ -444,7 +444,7 @@ const fakeBackend = () => {
     });
   });
 
-  mock.onDelete(url.DELETE_APPLY_JOB).reply(config => {
+  mock.onDelete(url.DELETE_APPLY_JOB).reply((config) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (config && config.headers) {
@@ -583,7 +583,7 @@ const fakeBackend = () => {
           // Passing fake JSON data as response
           const { params } = config;
           const email = mailDB.allmail.find(
-            mails => mails.id.toString() === params.id.toString()
+            (mails) => mails.id.toString() === params.id.toString()
           );
 
           resolve([200, email]);
@@ -598,29 +598,28 @@ const fakeBackend = () => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (mailDB.folders) {
-          resolve([200, mailDB.folders])
+          resolve([200, mailDB.folders]);
         } else {
-          reject([400, "Cannot get folder"])
+          reject([400, "Cannot get folder"]);
         }
-      })
-    })
-  })
+      });
+    });
+  });
 
-  mock.onPost(url.GET_SELECTE_MAIL).reply(config => {
+  mock.onPost(url.GET_SELECTE_MAIL).reply((config) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-
         if (config && config.data) {
-          const configs = JSON.parse(config.data)
-          const data = Object.keys(configs).map(k => parseInt(configs[k]))
+          const configs = JSON.parse(config.data);
+          const data = Object.keys(configs).map((k) => parseInt(configs[k]));
           // Passing fake JSON data as response
-          resolve([200, data.length > 1 ? data : configs.params])
+          resolve([200, data.length > 1 ? data : configs.params]);
         } else {
-          reject([400, "Cannot add selected mails"])
+          reject([400, "Cannot add selected mails"]);
         }
-      })
-    })
-  })
+      });
+    });
+  });
 
   mock.onDelete(url.SET_FOLDER_SELECTED_MAILS).reply((config: any) => {
     return new Promise((resolve, reject) => {
@@ -661,27 +660,26 @@ const fakeBackend = () => {
     });
   });
 
-
-  mock.onPut(url.UPDATE_MAIL).reply(mail => {
+  mock.onPut(url.UPDATE_MAIL).reply((mail) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (mail && mail.data) {
-          const data = JSON.parse(mail.data)
+          const data = JSON.parse(mail.data);
 
-          mailDB.allmail = mailDB.allmail.map(mail => {
+          mailDB.allmail = mailDB.allmail.map((mail) => {
             if (mail.id === data.id) {
-              return { ...mail, ...data }
+              return { ...mail, ...data };
             }
-            return mail
-          })
+            return mail;
+          });
 
-          resolve([200, data])
+          resolve([200, data]);
         } else {
-          reject([400, "Cannot update mail data"])
+          reject([400, "Cannot update mail data"]);
         }
-      })
-    })
-  })
+      });
+    });
+  });
 
   mock.onGet(url.GET_CUSTOMERS).reply(() => {
     return new Promise((resolve, reject) => {
@@ -696,7 +694,7 @@ const fakeBackend = () => {
     });
   });
 
-  mock.onDelete(url.DELETE_CUSTOMER).reply(config => {
+  mock.onDelete(url.DELETE_CUSTOMER).reply((config) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (config && config.headers) {
@@ -709,7 +707,7 @@ const fakeBackend = () => {
     });
   });
 
-  mock.onPost(url.ADD_NEW_CUSTOMER).reply(customer => {
+  mock.onPost(url.ADD_NEW_CUSTOMER).reply((customer) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (customer && customer.data) {
@@ -776,7 +774,7 @@ const fakeBackend = () => {
     });
   });
 
-  // crypto 
+  // crypto
   mock.onGet(url.GET_WALLET).reply(() => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -839,7 +837,7 @@ const fakeBackend = () => {
           // Passing fake JSON data as response
           const { params } = config;
           const invoice = invoiceList.find(
-            invoice => invoice.id.toString() === params.id.toString()
+            (invoice) => invoice.id.toString() === params.id.toString()
           );
           resolve([200, invoice]);
         } else {
@@ -871,7 +869,7 @@ const fakeBackend = () => {
           // Passing fake JSON data as response
           const { params } = config;
           const project = projects.find(
-            product => product.id.toString() === params.id.toString()
+            (product) => product.id.toString() === params.id.toString()
           );
           resolve([200, { ...project }]);
         } else {
@@ -881,23 +879,25 @@ const fakeBackend = () => {
     });
   });
 
-  mock.onGet(new RegExp(`${url.GET_DASHBOARD_EMAILCHART}/*`)).reply((config: any) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const { param } = config;
-        if (dashboardEmail) {
-          const filterChart = dashboardEmail.filter((item: any) => {
-            return item.id === param;
-          });
-          const data = filterChart.map((item: any) => item[param]);
-          // Passing fake JSON data as response
-          resolve([200, data[0]]);
-        } else {
-          reject([400, "Cannot get wallet data"]);
-        }
+  mock
+    .onGet(new RegExp(`${url.GET_DASHBOARD_EMAILCHART}/*`))
+    .reply((config: any) => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          const { param } = config;
+          if (dashboardEmail) {
+            const filterChart = dashboardEmail.filter((item: any) => {
+              return item.id === param;
+            });
+            const data = filterChart.map((item: any) => item[param]);
+            // Passing fake JSON data as response
+            resolve([200, data[0]]);
+          } else {
+            reject([400, "Cannot get wallet data"]);
+          }
+        });
       });
     });
-  });
 
   //latest transaction
   mock.onGet(url.GET_TRANSACTION).reply(() => {
@@ -914,23 +914,25 @@ const fakeBackend = () => {
   });
 
   // Wallet Balance
-  mock.onGet(new RegExp(`${url.GET_WALLENT_BALANCE}/*`)).reply((config: any) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (walletOptions) {
-          const { params } = config;
-          const filteredMessages: any = (walletOptions || []).filter(
-            (msg: any) => msg.id.toString() === params.roomId.toString()
-          );
+  mock
+    .onGet(new RegExp(`${url.GET_WALLENT_BALANCE}/*`))
+    .reply((config: any) => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (walletOptions) {
+            const { params } = config;
+            const filteredMessages: any = (walletOptions || []).filter(
+              (msg: any) => msg.id.toString() === params.roomId.toString()
+            );
 
-          // Passing fake JSON data as response
-          resolve([200, filteredMessages]);
-        } else {
-          reject([400, "Cannot get messages"]);
-        }
+            // Passing fake JSON data as response
+            resolve([200, filteredMessages]);
+          } else {
+            reject([400, "Cannot get messages"]);
+          }
+        });
       });
     });
-  });
 
   // visitors
   mock.onGet(new RegExp(`${url.GET_BLOG_VISITORS}/*`)).reply((config: any) => {
@@ -938,7 +940,9 @@ const fakeBackend = () => {
       setTimeout(() => {
         const { params } = config;
         if (visitor) {
-          const filteredVisitors: any = visitor.filter((msg: any) => msg.id === params.roomId);
+          const filteredVisitors: any = visitor.filter(
+            (msg: any) => msg.id === params.roomId
+          );
           // Passing fake JSON data as response
           resolve([200, filteredVisitors]);
         } else {
@@ -950,21 +954,24 @@ const fakeBackend = () => {
 
   // statistics Applications
 
-  mock.onGet(new RegExp(`${url.GET_STATISTICS_APPLICATION}/*`)).reply((config: any) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const { params } = config;
-        if (statisticsApplications) {
-          const filteredVisitors: any = statisticsApplications.filter((msg: any) => msg.id === params.roomId);
-          // Passing fake JSON data as response
-          resolve([200, filteredVisitors]);
-        } else {
-          reject([400, "Cannot get messages"]);
-        }
+  mock
+    .onGet(new RegExp(`${url.GET_STATISTICS_APPLICATION}/*`))
+    .reply((config: any) => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          const { params } = config;
+          if (statisticsApplications) {
+            const filteredVisitors: any = statisticsApplications.filter(
+              (msg: any) => msg.id === params.roomId
+            );
+            // Passing fake JSON data as response
+            resolve([200, filteredVisitors]);
+          } else {
+            reject([400, "Cannot get messages"]);
+          }
+        });
       });
     });
-  });
-
 
   mock.onGet(url.GET_GROUPS).reply(() => {
     return new Promise((resolve, reject) => {
@@ -992,14 +999,14 @@ const fakeBackend = () => {
     });
   });
 
-  mock.onGet(new RegExp(`${url.GET_MESSAGES}/*`)).reply(config => {
+  mock.onGet(new RegExp(`${url.GET_MESSAGES}/*`)).reply((config) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (messages) {
           // Passing fake JSON data as response
           const { params } = config;
           const filteredMessages = messages.filter(
-            msg => msg.roomId === params.roomId
+            (msg) => msg.roomId === params.roomId
           );
           resolve([200, filteredMessages]);
         } else {
@@ -1009,7 +1016,7 @@ const fakeBackend = () => {
     });
   });
 
-  mock.onPost(url.ADD_MESSAGE).reply(config => {
+  mock.onPost(url.ADD_MESSAGE).reply((config) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (config.data) {
@@ -1036,7 +1043,6 @@ const fakeBackend = () => {
   });
 
   mock.onGet(url.GET_ORDERS).reply(() => {
-
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (orders) {
@@ -1049,8 +1055,7 @@ const fakeBackend = () => {
     });
   });
 
-
-  mock.onPost(url.ADD_NEW_ORDER).reply(order => {
+  mock.onPost(url.ADD_NEW_ORDER).reply((order) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (order && order.data) {
@@ -1076,7 +1081,7 @@ const fakeBackend = () => {
     });
   });
 
-  mock.onDelete(url.DELETE_ORDER).reply(config => {
+  mock.onDelete(url.DELETE_ORDER).reply((config) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (config && config.headers) {
@@ -1089,7 +1094,7 @@ const fakeBackend = () => {
     });
   });
 
-  //Ecommerence Product 
+  //Ecommerence Product
   mock.onGet(url.GET_PRODUCTS).reply(() => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -1104,14 +1109,14 @@ const fakeBackend = () => {
   });
 
   //Ecommerence product Detailes
-  mock.onGet(new RegExp(`${url.GET_PRODUCTS_DETAIL}/*`)).reply(config => {
+  mock.onGet(new RegExp(`${url.GET_PRODUCTS_DETAIL}/*`)).reply((config) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (productsData) {
           // Passing fake JSON data as response
           const { params } = config;
           const product = productsData.find(
-            product => product.id.toString() === params.id.toString()
+            (product) => product.id.toString() === params.id.toString()
           );
           resolve([200, { ...product, recentProducts, comments }]);
         } else {
@@ -1134,7 +1139,7 @@ const fakeBackend = () => {
     });
   });
 
-  mock.onDelete(url.DELETE_PROJECT).reply(config => {
+  mock.onDelete(url.DELETE_PROJECT).reply((config) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (config && config.headers) {
@@ -1147,7 +1152,7 @@ const fakeBackend = () => {
     });
   });
 
-  mock.onDelete(url.DELETE_MAIL).reply(config => {
+  mock.onDelete(url.DELETE_MAIL).reply((config) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (config && config.headers) {
@@ -1159,7 +1164,6 @@ const fakeBackend = () => {
       });
     });
   });
-
 };
 
 export default fakeBackend;

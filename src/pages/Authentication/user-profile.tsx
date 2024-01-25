@@ -28,16 +28,15 @@ import Breadcrumb from "Components/Common/Breadcrumb";
 import avatar from "../../assets/images/users/avatar-1.jpg";
 
 import { editProfile, resetProfileFlag } from "slices/thunk";
-import { createSelector } from 'reselect';
+import { createSelector } from "reselect";
 
 const UserProfile = () => {
-
   //meta title
   document.title = "Profile | Skote - React Admin & Dashboard Template";
 
   const dispatch = useDispatch<any>();
 
-  const [email, setEmail] = useState("admin@gmail.com");
+  const [email, setEmail] = useState("admin@solutionave.com");
   const [name, setName] = useState(null);
   const [idx, setIdx] = useState(1);
 
@@ -46,7 +45,7 @@ const UserProfile = () => {
     (profile) => ({
       user: profile.user,
       error: profile.error,
-      success: profile.success
+      success: profile.success,
     })
   );
 
@@ -57,7 +56,6 @@ const UserProfile = () => {
       const storedUser: any = localStorage.getItem("authUser");
       const obj = JSON.parse(storedUser);
       if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-
         setName(obj.displayName);
         setEmail(obj.email);
         setIdx(obj.uid);
@@ -80,7 +78,7 @@ const UserProfile = () => {
     enableReinitialize: true,
 
     initialValues: {
-      username: name || 'admin',
+      username: name || "admin",
       idx: idx || 1,
     },
     validationSchema: Yup.object({
@@ -88,7 +86,7 @@ const UserProfile = () => {
     }),
     onSubmit: (values) => {
       dispatch(editProfile(values));
-    }
+    },
   });
 
   return (
@@ -116,7 +114,9 @@ const UserProfile = () => {
                     <div className="flex-grow-1 align-self-center">
                       <div className="text-muted">
                         <h5>{name || "admin"}</h5>
-                        <p className="mb-1">{email || "admin@gmail.com"}</p>
+                        <p className="mb-1">
+                          {email || "admin@solutionave.com"}
+                        </p>
                         <p className="mb-0">Id no: #{idx || 1}</p>
                       </div>
                     </div>
@@ -149,11 +149,15 @@ const UserProfile = () => {
                     onBlur={validation.handleBlur}
                     value={validation.values.username || ""}
                     invalid={
-                      validation.touched.username && validation.errors.username ? true : false
+                      validation.touched.username && validation.errors.username
+                        ? true
+                        : false
                     }
                   />
                   {validation.touched.username && validation.errors.username ? (
-                    <FormFeedback type="invalid">{validation.errors.username}</FormFeedback>
+                    <FormFeedback type="invalid">
+                      {validation.errors.username}
+                    </FormFeedback>
                   ) : null}
                   {/* <Input name="idx" value={idx} type="hidden" /> */}
                 </div>

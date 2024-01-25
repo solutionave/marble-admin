@@ -2,7 +2,18 @@ import React, { useEffect, useState } from "react";
 
 // Redux
 import { Link, useNavigate } from "react-router-dom";
-import { Row, Col, CardBody, Card, Container, Form, Input, Label, FormFeedback, Alert } from "reactstrap";
+import {
+  Row,
+  Col,
+  CardBody,
+  Card,
+  Container,
+  Form,
+  Input,
+  Label,
+  FormFeedback,
+  Alert,
+} from "reactstrap";
 
 // Formik validation
 import * as Yup from "yup";
@@ -15,10 +26,14 @@ import logo from "../../assets/images/logo.svg";
 import lightlogo from "../../assets/images/logo-light.svg";
 
 //import thunk
-import { loginuser, resetLoginMsgFlag, socialLogin } from "slices/auth/login/thunk";
+import {
+  loginuser,
+  resetLoginMsgFlag,
+  socialLogin,
+} from "slices/auth/login/thunk";
 
 import withRouter from "Components/Common/withRouter";
-import { createSelector } from 'reselect';
+import { createSelector } from "reselect";
 
 const Login = (props: any) => {
   const [show, setShow] = useState(false);
@@ -27,24 +42,23 @@ const Login = (props: any) => {
   //meta title
   document.title = "Login";
 
-
   const selectProperties = createSelector(
     (state: any) => state.Login,
     (login) => ({
-      error: login.error
+      error: login.error,
     })
   );
 
   const { error } = useSelector(selectProperties);
 
-  // Form validation 
+  // Form validation
   const validation: any = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
 
     initialValues: {
-      email: "admin@solutionave.com" || '',
-      password: "123456" || '',
+      email: "admin@solutionave.com" || "",
+      password: "123456" || "",
     },
     validationSchema: Yup.object({
       email: Yup.string().required("Please Enter Your email"),
@@ -52,26 +66,26 @@ const Login = (props: any) => {
     }),
     onSubmit: (values: any) => {
       dispatch(loginuser(values, props.router.navigate));
-    }
+    },
   });
 
   const signIn = (type: any) => {
-    dispatch(socialLogin(type, props.router.navigate))
-  }
+    dispatch(socialLogin(type, props.router.navigate));
+  };
 
   const socialResponse = (type: any) => {
-    signIn(type)
-  }
+    signIn(type);
+  };
 
   useEffect(() => {
     if (error) {
       setTimeout(() => {
-        dispatch(resetLoginMsgFlag())
+        dispatch(resetLoginMsgFlag());
       }, 3000);
     }
-  }, [dispatch, error])
+  }, [dispatch, error]);
 
-  const navigate =useNavigate()
+  const navigate = useNavigate();
 
   return (
     <React.Fragment>
@@ -121,12 +135,13 @@ const Login = (props: any) => {
                     </Link>
                   </div>
                   <div className="p-2">
-                    <Form className="form-horizontal"
+                    <Form
+                      className="form-horizontal"
                       onSubmit={(e) => {
                         e.preventDefault();
-                        // validation.handleSubmit();
+                        validation.handleSubmit();
 
-                        navigate('/dashboard')
+                        navigate("/dashboard");
 
                         return true;
                       }}
@@ -143,11 +158,15 @@ const Login = (props: any) => {
                           onBlur={validation.handleBlur}
                           value={validation.values.email || ""}
                           invalid={
-                            validation.touched.email && validation.errors.email ? true : false
+                            validation.touched.email && validation.errors.email
+                              ? true
+                              : false
                           }
                         />
                         {validation.touched.email && validation.errors.email ? (
-                          <FormFeedback type="invalid">{validation.errors.email}</FormFeedback>
+                          <FormFeedback type="invalid">
+                            {validation.errors.email}
+                          </FormFeedback>
                         ) : null}
                       </div>
 
@@ -162,14 +181,26 @@ const Login = (props: any) => {
                             onChange={validation.handleChange}
                             onBlur={validation.handleBlur}
                             invalid={
-                              validation.touched.password && validation.errors.password ? true : false
+                              validation.touched.password &&
+                              validation.errors.password
+                                ? true
+                                : false
                             }
                           />
-                          <button onClick={() => setShow(!show)} className="btn btn-light " type="button" id="password-addon">
-                            <i className="mdi mdi-eye-outline"></i></button>
+                          <button
+                            onClick={() => setShow(!show)}
+                            className="btn btn-light "
+                            type="button"
+                            id="password-addon"
+                          >
+                            <i className="mdi mdi-eye-outline"></i>
+                          </button>
                         </div>
-                        {validation.touched.password && validation.errors.password ? (
-                          <FormFeedback type="invalid">{validation.errors.password}</FormFeedback>
+                        {validation.touched.password &&
+                        validation.errors.password ? (
+                          <FormFeedback type="invalid">
+                            {validation.errors.password}
+                          </FormFeedback>
                         ) : null}
                       </div>
 
@@ -206,7 +237,7 @@ const Login = (props: any) => {
                               className="social-list-item bg-primary text-white border-primary"
                               onClick={(e: any) => {
                                 e.preventDefault();
-                                socialResponse("facebook")
+                                socialResponse("facebook");
                               }}
                             >
                               <i className="mdi mdi-facebook" />
@@ -226,7 +257,7 @@ const Login = (props: any) => {
                               className="social-list-item bg-danger text-white border-danger"
                               onClick={(e: any) => {
                                 e.preventDefault();
-                                socialResponse("google")
+                                socialResponse("google");
                               }}
                             >
                               <i className="mdi mdi-google" />
@@ -248,10 +279,7 @@ const Login = (props: any) => {
               <div className="mt-5 text-center">
                 <p>
                   Don&apos;t have an account ?{" "}
-                  <Link
-                    to="/register"
-                    className="fw-medium text-primary"
-                  >
+                  <Link to="/register" className="fw-medium text-primary">
                     {" "}
                     Signup now{" "}
                   </Link>{" "}
