@@ -141,9 +141,9 @@ const Login = (props: any) => {
                         e.preventDefault();
                         validation.handleSubmit();
 
-                        navigate("/dashboard");
+                        // navigate("/dashboard");
 
-                        return true;
+                        return false;
                       }}
                     >
                       <div className="mb-3">

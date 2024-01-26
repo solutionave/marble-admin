@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
+import { Dropdown, DropdownToggle, DropdownMenu, } from "reactstrap";
 
 //i18n
 import { withTranslation } from "react-i18next";
@@ -85,7 +85,7 @@ const ProfileMenu = (props: any) => {
             {props.t("Lock screen")}
           </DropdownItem> */}
           <div className="dropdown-divider" />
-          <Link to="/login" className="dropdown-item">
+          <Link to="/logout" className="dropdown-item">
             <i className="bx bx-power-off font-size-16 align-middle me-1 text-danger" />
             <span>{props.t("Logout")}</span>
           </Link>
