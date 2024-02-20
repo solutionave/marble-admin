@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Category {
+  id           Int           @id @default(autoincrement())
+  name         String
+  parentCategoryId Int?
+  parentCategory   Category? @relation("Subcategories", fields: [parentCategoryId], references: [id])
+  subcategories    Category[] @relation("Subcategories")
+  products      Product[]
+}
+
+model Product {
+  id             Int      @id @default(autoincrement())
+  name           String
+  description    String
+  price          Float
+  imageUrl       String
+  location       String
+  storeId        Int
+  categoryId     Int
+  store          Store    @relation(fields: [storeId], references: [id])
+  category       Category @relation(fields: [categoryId], references: [id])
+}
+
+model Store {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  telephone String
+  whatsapp  String
+  address   String
+  products  Product[]
+}
