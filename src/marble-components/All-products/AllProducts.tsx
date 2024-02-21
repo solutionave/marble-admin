@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   Row,
@@ -20,6 +20,7 @@ import makeAnimated from "react-select/animated";
 import DeleteProductModal from "./ProductDeletModal";
 import AddProductModal from "./ProductAddModal";
 import UpdateProductModal from "./ProductUpdateModal";
+import axios from "axios";
 const animatedComponents = makeAnimated();
 
 const AllProducts = () => {
@@ -295,6 +296,33 @@ const AllProducts = () => {
   const [selectedSubcategories, setSelectedSubcategories] = useState<
     { id: number; name: string }[]
   >([]);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:3000/products/');
+      return response.data;
+    } catch (error) {
+      console.error('Failed to fetch data:', error);
+      throw error; // Rethrow the error to handle it outside this function
+    }
+  };
+
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const data = await fetchData();
+        setProducts(data);
+      } catch (error) {
+        // Handle error if necessary
+      }
+    };
+
+    fetchProducts();
+  }, []);
+  console.log("products",products);
+
 
   return (
     <React.Fragment>
