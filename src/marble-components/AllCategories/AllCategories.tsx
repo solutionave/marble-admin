@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   Row,
@@ -15,11 +15,15 @@ import makeAnimated from "react-select/animated";
 import DeleteCategoryModal from "./DeleteCatModal";
 import AddCatModal from "./AddCatModal";
 import UpdateCatModal from "./UpdateCatModal";
+import AllCategoriesDetail from "./AllCategoriesDetail";
 const animatedComponents = makeAnimated();
 interface Category {
   id: number;
   name: string;
   parentId?: number | null;
+  subcategories: {
+    value: string;
+}[];
 }
 
 const handleDelete = (
@@ -95,14 +99,62 @@ const AllCategories: React.FC = () => {
       ],
     },
   ];
+  const categories2 = [
+    {
+      id: 1,
+      name: "marble",
+      subcategories: [
+        {
+          value: "sub marble 1",
+        },
+        {
+          value: "sub marble 2",
+        },
+        {
+          value: "sub marble 3",
+        },
+      ],
+    },
+    {
+      id: 2,
+      name: "Stone",
+      subcategories: [
+        {
+          value: "sub Stone 1",
+        },
+        {
+          value: "sub Stone 2",
+        },
+        {
+          value: "sub Stone 3",
+        },
+      ],
+    },
+    {
+      id: 3,
+      name: "Granite",
+      subcategories: [
+        {
+          value: "sub granite 1",
+        },
+        {
+          value: "sub granite 2",
+        },
+        {
+          value: "sub granite 3",
+        },
+      ],
+    },
+  ];
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSubcategories, setSelectedSubcategories] = useState<
     { id: number; name: string }[]
   >([]);
 
   document.title = "Manage Categories";
-
+  const [viewdata, setviewdata] = useState("");
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [newCategories, setnewCategories] = useState<Category[]>(categories2);
   const [deleteCategory, setDeleteCategory] = useState<Category | null>(null);
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [newCategory, setNewCategory] = useState("");
@@ -126,24 +178,34 @@ const AllCategories: React.FC = () => {
     setEditModalOpen(!isEditModalOpen);
   };
 
+  const handleAllData = (data) => {
+    setviewdata(data);
+  };
+
   const handleAddCategory = (
-    newCategory: string,
+    selectedCategory: string,
     parentId: number | null,
     categories: Category[],
     setCategories: React.Dispatch<React.SetStateAction<Category[]>>,
+    selectedSubcategories: { value: string }[],
     toggleAddModal: () => void
   ) => {
-    if (newCategory && parentId !== null) {
-      const newCategoryId = categories.length + 1;
+    if (selectedCategory) {
+      const newCategoryId = newCategories.length + 1;
       const newCategoryObject: Category = {
         id: newCategoryId,
-        name: newCategory,
+        name: selectedCategory,
         parentId,
+        subcategories:selectedSubcategories,
       };
 
       console.log("Adding Categories:", newCategoryObject);
-
-      setCategories([...categories, newCategoryObject]);
+      const category=[...newCategories, newCategoryObject];
+      setCategories([...newCategories, newCategoryObject]);
+      console.log("Categories:", newCategories);
+      setnewCategories(category);
+      // localStorage.removeItem('categories');
+      // localStorage.setItem("categories", JSON.stringify(newCategories));
       toggleAddModal();
     }
   };
@@ -167,7 +229,19 @@ const AllCategories: React.FC = () => {
       toggleEditModal();
     }
   };
-
+  // const storedUser: any = localStorage.getItem("categories");
+  //   const storedArray = JSON.parse(storedUser);
+  useEffect(() => {
+    // This will log the updated categories after each re-render
+    
+    
+    // if (storedArray) {
+    // setnewCategories(storedArray);
+    // }
+    // localStorage.setItem("categories", JSON.stringify(newCategories));
+    console.log("Categories use effect", newCategories);
+    // console.log("Stored Categories use effect", storedUser);
+  }, [newCategories]); 
   ////////////////////////////////
 
   return (
@@ -196,15 +270,21 @@ const AllCategories: React.FC = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {categories.map((category) => (
+                        {newCategories.map((category) => (
                           <tr key={category.id}>
                             <td>{category.id}</td>
                             <td>{category.name}</td>
                             <td className="text-center d-flex justify-content-center">
-                              <i
+                              {/* <i
                                 style={{ fontSize: "20px" }}
                                 className="dripicons-preview"
-                              ></i>
+                              ></i> */}
+                               <i
+                                onClick={() => handleAllData(category)}
+                                style={{ fontSize: "20px", cursor: "pointer" }}
+                              >
+                                <AllCategoriesDetail viewdata={viewdata} />
+                              </i>
                               <i
                                 style={{ fontSize: "20px", marginLeft: "10px" }}
                                 className="bx bx-edit-alt"
@@ -273,7 +353,7 @@ const AllCategories: React.FC = () => {
         toggleAddModal={toggleAddModal}
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
-        categories={categories}
+        categories={categories2}
         setSelectedSubcategories={setSelectedSubcategories}
         animatedComponents={animatedComponents}
         selectedSubcategories={selectedSubcategories}
